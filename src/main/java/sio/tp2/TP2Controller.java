@@ -37,7 +37,7 @@ public class TP2Controller implements Initializable {
     @FXML
     public void cmdValiderClicked(Event event)
     {
-        rendezVous = new RendezVous(spHeure.getValue().toString(),spMinute.getValue().toString(),txtNomPatient.getText(),cboNomPathologie.getSelectionModel().getSelectedItem().toString());
+
 
         if (txtNomPatient.getText().isEmpty() && dpDateRdv.getValue() == null) {
             Alert a = new Alert(Alert.AlertType.ERROR);
@@ -58,19 +58,63 @@ public class TP2Controller implements Initializable {
         // heure et minutes choisie
         String heureChoisie = spHeure.getValue().toString();
         String minuteChoisie = spMinute.getValue().toString();
-        if(heureChoisie.length() == 1){
+        if(heureChoisie.length() == 1)
+        {
             heureChoisie = "0" + spHeure.getValue().toString();
         }
-        if (minuteChoisie.length() == 1){
+        if (minuteChoisie.length() == 1)
+        {
             minuteChoisie = "0" + spMinute.getValue().toString();
         }
         String heureBonne = heureChoisie + ":" + minuteChoisie;
         // format date et heure
         DateTimeFormatter dft = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String maDate = dft.format(dpDateRdv.getValue());
-    }
-    /*public void planning(){
 
+        // Ajout dans le TreeMap
+
+        rendezVous = new RendezVous(heureBonne
+                ,txtNomPatient.getText()
+                ,cboNomPathologie.getSelectionModel().getSelectedItem().toString());
+
+        // attention vérifier si date et heure sont présentes
+
+        // Verifier si date existe ou pas
+        if (!monPlanning.containsKey(maDate)){
+            TreeMap<String , RendezVous> lesRDV = new TreeMap<>();
+            monPlanning.put(maDate,lesRDV);
+        }
+        monPlanning.get(maDate).put(heureBonne,rendezVous);
+
+        int bidon = 12;
+
+
+        // On affiche dans le treeview
+        TreeItem noeudDate;
+        TreeItem noeudHeure;
+        TreeItem noeudDivers;
+
+        root.getChildren().clear();
+
+        for (String date : monPlanning.keySet())
+        {
+            noeudDate = new TreeItem(date);
+            for (String heure : monPlanning.get(date).keySet()){
+                noeudHeure = new TreeItem(heure);
+                noeudDivers = new TreeItem(monPlanning.get(date).get(heure).getNomPatient());
+                noeudHeure.getChildren().add(noeudDivers);
+                noeudDivers = new TreeItem(monPlanning.get(date).get(heure).getNomPathologie());
+                noeudHeure.getChildren().add(noeudDivers);
+                noeudHeure.setExpanded(true);
+                noeudDate.getChildren().add(noeudHeure);
+                noeudHeure.setExpanded(true);
+            }
+
+
+        }
+    }
+    /*public boolean rechercherRdv(String uneDate ,String uneHeure)
+    {
 
     }*/
 
