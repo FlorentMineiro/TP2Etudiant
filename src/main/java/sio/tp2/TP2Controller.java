@@ -109,9 +109,10 @@ public class TP2Controller implements Initializable {
                 noeudDate.getChildren().add(noeudHeure);
                 noeudHeure.setExpanded(true);
             }
-
+            root.getChildren().add(noeudDate);
 
         }
+        tvPlanning.setRoot(root);
     }
     /*public boolean rechercherRdv(String uneDate ,String uneHeure)
     {
