@@ -34,6 +34,7 @@ public class TP2Controller implements Initializable {
     private Button cmdValider;
     private RendezVous rendezVous;
 
+
     @FXML
     public void cmdValiderClicked(Event event)
     {
@@ -71,11 +72,19 @@ public class TP2Controller implements Initializable {
         DateTimeFormatter dft = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String maDate = dft.format(dpDateRdv.getValue());
 
-        // Ajout dans le TreeMap
+        if (rechercherRDV(maDate,heureBonne)){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur !");
+            alert.setHeaderText("Il y a déja un rendez vous à cette date et cette heure");
+            alert.showAndWait();
+        }
 
+        // Ajout dans le TreeMap
         rendezVous = new RendezVous(heureBonne
                 ,txtNomPatient.getText()
                 ,cboNomPathologie.getSelectionModel().getSelectedItem().toString());
+
+
 
         // attention vérifier si date et heure sont présentes
 
@@ -86,6 +95,13 @@ public class TP2Controller implements Initializable {
         }
         monPlanning.get(maDate).put(heureBonne,rendezVous);
 
+
+
+
+
+
+
+
         int bidon = 12;
 
 
@@ -94,11 +110,12 @@ public class TP2Controller implements Initializable {
         TreeItem noeudHeure;
         TreeItem noeudDivers;
 
-        root.getChildren().clear();
+        //root.getChildren().clear();
 
         for (String date : monPlanning.keySet())
         {
             noeudDate = new TreeItem(date);
+
             for (String heure : monPlanning.get(date).keySet()){
                 noeudHeure = new TreeItem(heure);
                 noeudDivers = new TreeItem(monPlanning.get(date).get(heure).getNomPatient());
@@ -114,11 +131,20 @@ public class TP2Controller implements Initializable {
         }
         tvPlanning.setRoot(root);
     }
-    /*public boolean rechercherRdv(String uneDate ,String uneHeure)
-    {
+    /*Vérifier quelques saisies , nom patient + choix de la date (alert)
+    Verifier si RDV existe deja à cette date et heure (indice : containsKey(date) et containsKey(heure))
+    Vérifier si la date et heure n'existe pas -> creer la TreeMap des heures , créer l'objet Render-vous , créer la date
+     */
+    public boolean rechercherRDV(String uneDate,String uneHeure){
 
-    }*/
-
+        boolean trouve = false;
+        if (monPlanning.containsKey(uneDate)){
+            if (monPlanning.containsKey(uneHeure)){
+                trouve = true;
+            }
+        }
+        return trouve;
+    }
 
 
     @Override
