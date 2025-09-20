@@ -78,58 +78,51 @@ public class TP2Controller implements Initializable {
             alert.setHeaderText("Il y a déja un rendez vous à cette date et cette heure");
             alert.showAndWait();
         }
-
-        // Ajout dans le TreeMap
-        rendezVous = new RendezVous(heureBonne
-                ,txtNomPatient.getText()
-                ,cboNomPathologie.getSelectionModel().getSelectedItem().toString());
-
-
-
-        // attention vérifier si date et heure sont présentes
-
-        // Verifier si date existe ou pas
-        if (!monPlanning.containsKey(maDate)){
-            TreeMap<String , RendezVous> lesRDV = new TreeMap<>();
-            monPlanning.put(maDate,lesRDV);
-        }
-        monPlanning.get(maDate).put(heureBonne,rendezVous);
+else {
+            // Ajout dans le TreeMap
+            rendezVous = new RendezVous(heureBonne
+                    , txtNomPatient.getText()
+                    , cboNomPathologie.getSelectionModel().getSelectedItem().toString());
 
 
+            // attention vérifier si date et heure sont présentes
 
-
-
-
-
-
-        int bidon = 12;
-
-
-        // On affiche dans le treeview
-        TreeItem noeudDate;
-        TreeItem noeudHeure;
-        TreeItem noeudDivers;
-
-        //root.getChildren().clear();
-
-        for (String date : monPlanning.keySet())
-        {
-            noeudDate = new TreeItem(date);
-
-            for (String heure : monPlanning.get(date).keySet()){
-                noeudHeure = new TreeItem(heure);
-                noeudDivers = new TreeItem(monPlanning.get(date).get(heure).getNomPatient());
-                noeudHeure.getChildren().add(noeudDivers);
-                noeudDivers = new TreeItem(monPlanning.get(date).get(heure).getNomPathologie());
-                noeudHeure.getChildren().add(noeudDivers);
-                noeudHeure.setExpanded(true);
-                noeudDate.getChildren().add(noeudHeure);
-                noeudHeure.setExpanded(true);
+            // Verifier si date existe ou pas
+            if (!monPlanning.containsKey(maDate)) {
+                TreeMap<String, RendezVous> lesRDV = new TreeMap<>();
+                monPlanning.put(maDate, lesRDV);
             }
-            root.getChildren().add(noeudDate);
+            monPlanning.get(maDate).put(heureBonne, rendezVous);
 
+
+            int bidon = 12;
+
+
+            // On affiche dans le treeview
+            TreeItem noeudDate;
+            TreeItem noeudHeure;
+            TreeItem noeudDivers;
+
+            //root.getChildren().clear();
+
+            for (String date : monPlanning.keySet()) {
+                noeudDate = new TreeItem(date);
+
+                for (String heure : monPlanning.get(date).keySet()) {
+                    noeudHeure = new TreeItem(heure);
+                    noeudDivers = new TreeItem(monPlanning.get(date).get(heure).getNomPatient());
+                    noeudHeure.getChildren().add(noeudDivers);
+                    noeudDivers = new TreeItem(monPlanning.get(date).get(heure).getNomPathologie());
+                    noeudHeure.getChildren().add(noeudDivers);
+                    noeudHeure.setExpanded(true);
+                    noeudDate.getChildren().add(noeudHeure);
+                    noeudHeure.setExpanded(true);
+                }
+                root.getChildren().add(noeudDate);
+
+            }
+            tvPlanning.setRoot(root);
         }
-        tvPlanning.setRoot(root);
     }
     /*Vérifier quelques saisies , nom patient + choix de la date (alert)
     Verifier si RDV existe deja à cette date et heure (indice : containsKey(date) et containsKey(heure))
